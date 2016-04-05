@@ -1,0 +1,4 @@
+---
+
+- name: Installing Nginx
+  package: name="nginx"

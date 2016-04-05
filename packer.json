@@ -1,0 +1,23 @@
+{
+  "builders": [
+    {
+      "type": "docker",
+      "image": "phusion/baseimage",
+      "export_path": "builds/test-image.tar"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "tools/scripts/configure-ssh.sh"
+    },
+    {
+      "type": "ansible",
+      "playbook_file": "tools/ansible/packer-playbook.yml",
+      "user": "root",
+      "ssh_authorized_key_file": ".insecure_private_key"
+    }
+  ]
+}
+
+

@@ -1,0 +1,45 @@
+---
+
+- name: Setting MySQL root password
+  debconf: 
+    name: mysql-server 
+    question: 'mysql-server/root_password' 
+    value: '' 
+    vtype: password
+
+- debconf:
+    name: mysql-server
+    question: mysql-server/root_password_again
+    value: ''
+    vtype: password
+
+- name: Installing MySQL
+  package: name=mysql-server
+
+- name: Removing anonymous MySQL server user for localhost
+  mysql_user:
+    user: ''
+    state: absent
+    login_password: ''
+    login_user: root
+
+- name: Secure MySQL root user
+  mysql_user:
+    user: root
+    password: ''
+    host: '{{ item }}'
+    login_password: ''
+    login_user: root
+    with_items:
+      - 127.0.0.1
+      - localhost
+      - ::1
+      - "{{ ansible_fqdn }}"
+
+- name: Remove MySQL test database
+  mysql_db:
+    db: test
+    state: absent
+    login_password: ''
+    login_user: root
+
